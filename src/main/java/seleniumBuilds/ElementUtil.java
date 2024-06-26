@@ -1,9 +1,6 @@
 package seleniumBuilds;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
@@ -233,9 +230,9 @@ public class ElementUtil {
 
     }
 
-    public  void doSearch(By searchLocator, By suggestLocator, String searchKey, String searchValue) throws InterruptedException {
+    public void doSearch(By searchLocator, By suggestLocator, String searchKey, String searchValue) throws InterruptedException {
 //      driver.findElement(searchLocator).sendKeys(searchKey);
-        doSendKeys(searchLocator,searchKey);
+        doSendKeys(searchLocator, searchKey);
         Thread.sleep(3000);
 
 //        List<WebElement> suggestList = driver.findElements(suggestLocator);
@@ -247,6 +244,35 @@ public class ElementUtil {
             if (text.contains(searchValue)) {
                 e.click();
                 break;
+            }
+        }
+
+    }
+
+    public void selectChoiceDropDown(By dropDownLocator, By dropDownOptionsLocator, String... value) throws InterruptedException {
+        driver.findElement(dropDownLocator).click();
+        Thread.sleep(3000);
+        List<WebElement> multiDropDownOptions = driver.findElements(dropDownOptionsLocator);
+
+        System.out.println(multiDropDownOptions.size());
+        if (!value[0].equals("all")) {
+            for (WebElement e : multiDropDownOptions) {
+                String text = e.getText();
+                for (String val : value) {
+                    if (text.equals(val)) {
+                        e.click();
+                    }
+                }
+            }
+        } else {
+            for (WebElement e : multiDropDownOptions) {
+                try {
+                    e.click();
+                } catch (ElementNotInteractableException ex) {
+                    break;
+                }
+
+
             }
         }
 
