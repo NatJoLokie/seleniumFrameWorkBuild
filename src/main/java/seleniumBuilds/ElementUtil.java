@@ -220,11 +220,31 @@ public class ElementUtil {
 
     //Dropdownto select a value without using select
     public void doSelectValueDropDownWS(By locators, String value) {
+//      List<WebElement> optionsList = driver.findElements(By.xpath("//select[@id='Form_getForm_Country']/option"));
         List<WebElement> optionsList = getElements(locators);
         System.out.println(optionsList.size());
         for (WebElement e : optionsList) {
             String text = e.getText();
             if (text.equals(value)) {
+                e.click();
+                break;
+            }
+        }
+
+    }
+
+    public  void doSearch(By searchLocator, By suggestLocator, String searchKey, String searchValue) throws InterruptedException {
+//      driver.findElement(searchLocator).sendKeys(searchKey);
+        doSendKeys(searchLocator,searchKey);
+        Thread.sleep(3000);
+
+//        List<WebElement> suggestList = driver.findElements(suggestLocator);
+        List<WebElement> suggestList = getElements(suggestLocator);
+        System.out.println(suggestList.size());
+
+        for (WebElement e : suggestList) {
+            String text = e.getText();
+            if (text.contains(searchValue)) {
                 e.click();
                 break;
             }
