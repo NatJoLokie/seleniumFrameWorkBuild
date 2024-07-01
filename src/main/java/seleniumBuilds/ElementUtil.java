@@ -277,4 +277,20 @@ public class ElementUtil {
         }
 
     }
+
+    public void selectUser(String name) {
+        String xpath = "//a[text()='" + name + "']/ancestor::tr//input[@type='checkbox']";
+        driver.findElement(By.xpath(xpath)).click();
+    }
+
+    public ArrayList<String> selectUsers(String name) {
+        String xpath = "//a[text()='" + name + "']/parent::td/following-sibling::td";
+        List<WebElement> elements = driver.findElements(By.xpath(xpath));
+        ArrayList<String> userElements = new ArrayList<String>();
+        for (WebElement e : elements) {
+            String text = e.getText();
+            userElements.add(text);
+        }
+        return userElements;
+    }
 }
