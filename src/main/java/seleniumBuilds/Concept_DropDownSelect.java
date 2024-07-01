@@ -15,15 +15,19 @@ public class Concept_DropDownSelect {
         driver.get("https://www.orangehrm.com/30-day-free-trial/");
         driver.manage().window().maximize();
 
-        WebElement countries = driver.findElement(By.id("Form_getForm_Country"));
+//        WebElement countries = driver.findElement(By.id("Form_getForm_Country"));
 
-        Select select = new Select(countries);
+        By countriesLocator = By.id("Form_getForm_Country");
 
-        select.selectByIndex(5);
+//        Select select = new Select(countries);
+//
+//        select.selectByIndex(5);
+//
+//        select.selectByVisibleText("India");
+//
+//        select.selectByValue("Australia");
 
-        select.selectByVisibleText("India");
-
-        select.selectByValue("Australia");
+        doSelectByVisibleText(countriesLocator,"Germany");
     }
 
     public static WebElement getElement(By locator) {
