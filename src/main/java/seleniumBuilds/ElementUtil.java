@@ -1,6 +1,7 @@
 package seleniumBuilds;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
@@ -16,6 +17,13 @@ public class ElementUtil {
         this.driver = driver;
     }
 
+    /**
+     * Method to get single element
+     * driver.findElement(locator)
+     *
+     * @param locator By WebElement
+     * @return
+     */
     public WebElement getElement(By locator) {
         WebElement element = null;
         try {
@@ -28,6 +36,13 @@ public class ElementUtil {
         return element;
     }
 
+    /**
+     * Helps to use the desired locator
+     *
+     * @param locatorType  String
+     * @param locatorValue String
+     * @return
+     */
     public By getBy(String locatorType, String locatorValue) {
 
         By locator = null;
@@ -57,6 +72,13 @@ public class ElementUtil {
         return locator;
     }
 
+    /**
+     * Overloaded method that helps to get element using the desired locator type
+     *
+     * @param locatorType
+     * @param locatorValue
+     * @return
+     */
     public WebElement getElement(String locatorType, String locatorValue) {
         return driver.findElement(getBy(locatorType, locatorValue));
     }
@@ -292,5 +314,40 @@ public class ElementUtil {
             userElements.add(text);
         }
         return userElements;
+    }
+
+    /**
+     * Method to hover and select the desired number of items
+     *
+     * @param l1
+     * @param l2
+     * @param l3
+     * @param l4
+     * @throws InterruptedException
+     */
+    public void handleMultipleSubMenu(By l1, By l2, By l3, By l4) throws InterruptedException {
+//        getElement(l1).click();
+        doClick(l1);
+        Thread.sleep(1500);
+
+        Actions act = new Actions(driver);
+
+        act.moveToElement(getElement(l2)).perform();
+        Thread.sleep(1500);
+        act.moveToElement(getElement(l3)).perform();
+        Thread.sleep(1500);
+//        getElement(l4).click();
+        doClick(l4);
+
+    }
+
+    public void doActionsClick(By locator) {
+        Actions act = new Actions(driver);
+        act.click(getElement(locator)).perform();
+    }
+
+    public void doActionsSendKeys(By locator, String value) {
+        Actions act = new Actions(driver);
+        act.sendKeys(getElement(locator), value).perform();
     }
 }
