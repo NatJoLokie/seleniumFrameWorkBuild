@@ -29,6 +29,7 @@ public class Concept_CustomPageLoadTimeOut {
                 .jsReturnsValue("return document.readyState ==='complete'"))
                 .toString();
         return Boolean.parseBoolean(flag);
+
     }
 
 }
