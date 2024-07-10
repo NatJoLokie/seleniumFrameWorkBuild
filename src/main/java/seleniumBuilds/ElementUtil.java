@@ -2,8 +2,9 @@ package seleniumBuilds;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.*;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +89,11 @@ public class ElementUtil {
         getElement(locator).sendKeys(value);
     }
 
+    public void doSendKeys(By locator, String value, int timeOut) {
+        nullBlankCheck(value);
+        waitForElementVisible(locator, timeOut).sendKeys(value);
+    }
+
     public void doSendKeys(String locatorType, String locatorValue, String value) {
         nullBlankCheck(value);
         getElement(locatorType, locatorValue).sendKeys(value);
@@ -111,7 +117,6 @@ public class ElementUtil {
 
     public List<WebElement> getElements(By locator) {
         return driver.findElements(locator);
-
     }
 
     public int getElementsCount(By locator) {
@@ -341,6 +346,7 @@ public class ElementUtil {
 
     }
 
+    //
     public void doActionsClick(By locator) {
         Actions act = new Actions(driver);
         act.click(getElement(locator)).perform();
@@ -350,4 +356,185 @@ public class ElementUtil {
         Actions act = new Actions(driver);
         act.sendKeys(getElement(locator), value).perform();
     }
+
+//-------------------Wait Utility---------------------
+
+    public void doClickWhenReady(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    }
+
+    /**
+     * An expectation for checking that an element is present on the DOM of a page. This does not necessarily mean that the element is visible.
+     * Params:
+     * locator – used to find the element
+     * Returns:
+     * the WebElement once it is located
+     */
+    public WebElement waitForElementPresent(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
+    /**
+     * An expectation for checking that there is at least one element present on a web page.
+     * Params:
+     * locator – used to find the element
+     * Returns:
+     * the list of WebElements once they are located     *
+     */
+    public List<WebElement> waitForElementsPresent(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    }
+
+    public List<WebElement> waitForElementsPresentByFluentWait(By locator, int timeOut, int pollingTimeOut) {
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(timeOut))
+                .pollingEvery(Duration.ofSeconds(pollingTimeOut))
+                .ignoring(NoSuchElementException.class) // multiple ignoring methods can be added
+                .ignoring(StaleElementReferenceException.class)
+                .withMessage("time out..No Element Present");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    }
+
+    /**
+     * An expectation for checking that an element is present on the DOM of a page and visible. Visibility means that the element is not only displayed but also has a height and width that is greater than 0.
+     * Params:
+     * locator – used to find the element
+     * Returns:
+     * the WebElement once it is located and visible
+     */
+    public WebElement waitForElementVisible(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    /**
+     * driver – The WebDriver instance to pass to the expected conditions
+     * timeout – The timeout in seconds when an expectation is called
+     * intervalTimeOut/sleep – The duration in milliseconds to sleep between polls.
+     */
+    public WebElement waitForElementVisible(By locator, int timeOut, int intervalTimeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut), Duration.ofSeconds(intervalTimeOut));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    public List<WebElement> waitForElementsVisible(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+
+    /**
+     * Wait for Title Contains
+     */
+    public String waitForTitleContains(String titleFraction, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        try {
+            if (wait.until(ExpectedConditions.titleContains(titleFraction))) {
+                return driver.getTitle();
+            }
+        } catch (Exception e) {
+            System.out.println("title is not found :" + timeOut);
+        }
+        return null;
+    }
+
+    /**
+     * Wait for Title Equals
+     */
+    public String waitForTitleEquals(String title, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        try {
+            if (wait.until(ExpectedConditions.titleIs(title))) {
+                return driver.getTitle();
+            }
+        } catch (Exception e) {
+            System.out.println("title is not found :" + timeOut);
+        }
+        return null;
+    }
+
+    /**
+     * Wait for URL Contains
+     */
+    public String waitForURLContains(String urlFraction, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        try {
+            if (wait.until(ExpectedConditions.urlContains(urlFraction))) {
+                return driver.getTitle();
+            }
+        } catch (Exception e) {
+            System.out.println("title is not found :" + timeOut);
+        }
+        return null;
+    }
+
+    /**
+     * Wait for URL Equals
+     */
+    public String waitForURLEquals(String url, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        try {
+            if (wait.until(ExpectedConditions.urlToBe(url))) {
+                return driver.getTitle();
+            }
+        } catch (Exception e) {
+            System.out.println("title is not found :" + timeOut);
+        }
+        return null;
+    }
+
+    public Alert waitForJSAlert(int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.alertIsPresent());
+    }
+
+    public Alert waitForJSAlertFluentWait(int timeOut, int pollingTimeOut) {
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(timeOut))
+                .pollingEvery(Duration.ofSeconds(pollingTimeOut))
+                .ignoring(NoSuchElementException.class) // multiple ignoring methods can be added
+                .ignoring(StaleElementReferenceException.class)
+                .withMessage("time out..No Alert Present");
+        return wait.until(ExpectedConditions.alertIsPresent());
+    }
+
+    public String getAlertText(int timeOut) {
+        return waitForJSAlert(timeOut).getText();
+    }
+
+    public void acceptAlert(int timeOut) {
+        waitForJSAlert(timeOut).accept();
+    }
+
+    public void dismissAlert(int timeOut) {
+        waitForJSAlert(timeOut).dismiss();
+    }
+
+    public void alertSendKeys(int timeOut, String value) {
+        waitForJSAlert(timeOut).sendKeys(value);
+    }
+
+    public Boolean waitForWindow(int noOfWindowsToBe, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        return wait.until(ExpectedConditions.numberOfWindowsToBe(noOfWindowsToBe));
+    }
+
+    public void waitForFrameAndSwitchTo(By locator, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(locator));
+    }
+
+    public void waitForFrameAndSwitchTo(int frameIndex, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameIndex));
+    }
+
+    public void waitForFrameAndSwitchTo(WebElement frameElement, int timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameElement));
+    }
+
+
 }
