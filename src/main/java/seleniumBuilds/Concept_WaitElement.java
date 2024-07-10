@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class Concept_ExplicitWait {
+public class Concept_WaitElement {
     static WebDriver driver;
 
     public static void main(String[] args) {
