@@ -7,7 +7,7 @@ public class PalindromeString {
         String input = "never odd or even";
         System.out.println(input);
 
-        char[] inputArray = input.toLowerCase().replaceAll("\\s","").toCharArray();
+        char[] inputArray = input.toLowerCase().replaceAll("\\s ","").toCharArray();
 
         int iALength = inputArray.length;
 //        System.out.println(iALength);

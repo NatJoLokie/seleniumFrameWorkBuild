@@ -2,7 +2,7 @@ package javaPros.stringPros;
 
 public class PanagramString {
     public static void main(String[] args) {
-        String input = "The quick brown dog jumps over a lazy dog";
+        String input = "The quick brown fox jumps over a lazy dog";
 
         input = input.toLowerCase();
         if(checkPanagram(input)){

@@ -2,7 +2,7 @@ package javaPros.stringPros;
 
 public class SpecialCharString3 {
     public static void main(String[] args) {
-        String input = "~`!@#$%^&*()_+-=/*{}[]:\";'Ch@r# !7t* e7$/?><|";
+        String input = "~`!@#$%^&*()_+-=/*{}[]:\";'Ch@r# !7t* e7$\\?><|";
 
 //        System.out.println((int)'a');
 //        System.out.println((int)'z');

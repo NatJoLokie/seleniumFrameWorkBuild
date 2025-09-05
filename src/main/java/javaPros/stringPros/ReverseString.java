@@ -2,7 +2,7 @@ package javaPros.stringPros;
 
 public class ReverseString {
     public static void main(String[] args) {
-        String input = "neveroddoreven";
+        String input = "never odd or even";
 
         char[] inputArray = input.toCharArray();
 
